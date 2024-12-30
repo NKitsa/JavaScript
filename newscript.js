@@ -1,7 +1,7 @@
 const words = ["population", "javascript", "challenge", "typing", "programming", "function", "variable", "score", "object"];
 let currentWord = "";
 let score = 0;
-let timeLeft = 60;
+let timeLeft = 10;
 let timer;
 let typedIndex = 0; // Index of the current letter being typed
 

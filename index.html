@@ -9,59 +9,45 @@
         body{
             background-color: aqua;
         }
-        .head{
-            background-color: red;
-        }
         .body{
             /* background-color: blue; */
             display: flex;
             justify-content: center;
             border-radius: 50px;
-            
+        }
+        .score-timer {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px;
         }
     </style>
 </head>
   <body>
-    <div id="bd">
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="crossorigin="anonymous">
-            function startgame(){
-
-            }
-        </script>
-    </div>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-              <a class="nav-link" href="#">Features</a>
-              <a class="nav-link" href="#">Pricing</a>
-              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-            </div>
-          </div>
-        </div>
-      </nav>
         <div class="contrainer-fluid" style="display: flex; justify-content: center; background-color: red;">
             <div>
                 <h1>Typing a game</h1>
-                <p >Type as many words as you can until time runs out!</p>
+                <p>Type as many words as you can until time runs out!</p>
             </div>
         </div>
         <div class="contrainer" style="background-color:green;">
-            <div class="body" id="bd">
-                <button class="btn btn-outlinedark" style="width: 15%;height: auto;  padding: 30px;" onclick="startgame">start</button>
+            <div class="body" >
+                <button class="btn btn-outlinedark" id="start" style="width: 15%;height: auto; padding: 30px;" >start</button>
             </div>
-            <div>
-                <h1>Score <span style="float: right;">TimeLeft</span></h1>
-                
+            <div class="score-timer">
+                <div class="fs-1" id="score">score
+                  <div>0</div>
+                </div>
+                <div class="fs-1" id="timer">timer
+                  <div>0</div>
+                </div>
             </div>
-            
+            <div class="text-center fs-1" id="word">wdosdo</div>
+            <div class="text-center fs-1">
+              <input type="text" id="input" placeholder="Type here..." disabled>
+          </div>
         </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="Typing.js"></script>
   </body>
 </html>

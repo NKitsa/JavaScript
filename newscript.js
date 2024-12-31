@@ -27,10 +27,9 @@ function updateScore() {
 }
 
 function startTimer() {
-  clearInterval(timer);
   timer = setInterval(() => {
-    timerDisplay.textContent = `Time Left: ${--timeLeft}`;
-    if (timeLeft <= 0) clearInterval(timer), endGame();
+    timerDisplay.innerHTML = `Time Left: ${--timeLeft}`;
+    if (timeLeft <= 0) clearInterval(timer);
   }, 1000);
 }
 

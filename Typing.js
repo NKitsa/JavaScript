@@ -18,6 +18,8 @@ let currentWord = "";
 const wordDisplay = document.getElementById("word");
 const startButton = document.getElementById("start");
 const scoreDisplay = document.getElementById("score");
+const timerDisplay = document.getElementById("timer");
+const reloadButton = document.getElementById("reload");
 
 // ฟังก์ชันเริ่มเกม
 function startGame() {
@@ -25,8 +27,30 @@ function startGame() {
     timeLeft = 10;
     typedIndex = 0;
     nextWord();
+    startTimer();
+    startButton.style.display = "none";
+    
     document.addEventListener("keydown", handleTyping);
 }
+
+function startTimer() {
+  timer = setInterval(() => {
+    timerDisplay.innerHTML = `time <br> ${Math.max(--timeLeft,0)}`;
+    if (timeLeft <= 0) {
+      alert("Game Over", `Your score is ${score}`);
+      clearInterval(timer);
+      reloadButton.style.display = "block";
+    }
+  }, 1000);
+  
+}
+
+function reload(){
+  // รีหน้า web
+  window.location.reload();
+  
+}
+
 
 
 function updateScore(){
@@ -79,5 +103,6 @@ function handleTyping(event) {
   }
 }
 startButton.addEventListener("click", startGame);
+reloadButton.addEventListener("click", reload);
 
 

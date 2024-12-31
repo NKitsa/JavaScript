@@ -13,59 +13,71 @@ let timeLeft = 60;
 let timer;
 let errors = 0;
 let typedIndex = 0; // Index of the current letter being typed
+let currentWord = "";
 
 const wordDisplay = document.getElementById("word");
 const startButton = document.getElementById("start");
-const inputField = document.getElementById("input");
+const scoreDisplay = document.getElementById("score");
 
 // ฟังก์ชันเริ่มเกม
 function startGame() {
     score = 0;
     timeLeft = 10;
-    errors = 0;
-    inputField.value = "";
     typedIndex = 0;
-    inputField.disabled = false;
-    inputField.focus();
     nextWord();
+    document.addEventListener("keydown", handleTyping);
 }
 
+
+function updateScore(){
+  scoreDisplay.innerHTML = `score<br>${score}`;
+}
 // Function to replace the word in the div
 function nextWord() {
-    // Get a random word from the array
-    const randomWord = words[Math.floor(Math.random() * words.length)];
-    // เอา array มายัด
-    currentWord = randomWord;
-    typedIndex = 0;
-    renderWord();
+  // จะให้ currentword ที่เป็นคำที่สุ่มมาจาก array words
+  currentWord = words[Math.floor(Math.random() * words.length)];
+  typedIndex = 0;
+  renderWord();
 }
 
 function renderWord() {
-    let renderedHTML = "";
-    for (let i = 0; i < currentWord.length; i++) {
+  let renderedHTML = ""; // ประกาศตัวแปรเพื่อเก็บ HTML ที่จะถูกสร้างขึ้น
+  // วนลูปผ่านตัวอักษรใน currentWord
+  for (let i = 0; i < currentWord.length; i++) {
+      // ถ้าตัวอักษรในตำแหน่งปัจจุบันถูกพิมพ์ถูกต้อง (i < typedIndex)
       if (i < typedIndex) {
-        renderedHTML += `<span class="correct">${currentWord[i]}</span>`;
+          // เพิ่มตัวอักษรที่ถูกพิมพ์ถูกต้องลงใน renderedHTML โดยห่อด้วย <span class="correct">
+          renderedHTML += `<span class="correct">${currentWord[i]}</span>`;
       } else {
-        renderedHTML += `<span>${currentWord[i]}</span>`;
+          // เพิ่มตัวอักษรที่ยังไม่ได้พิมพ์ลงใน renderedHTML โดยห่อด้วย <span>
+          renderedHTML += `<span>${currentWord[i]}</span>`;
       }
-    }
-    wordDisplay.innerHTML = renderedHTML;
+  }
+  // อัพเดตเนื้อหาของ wordDisplay ด้วย HTML ที่สร้างขึ้น
+  wordDisplay.innerHTML = renderedHTML;
 }
-function handleTyping(e){
-    // ยัดค่าที่พิมพ์เข้าไป
-    const typedValue = e.target.value;
-    // ถ้าตัวที่พิมพ์เข้าไปเท่ากับใน array ที่สุ่มมา
-    if(typedValue == currentWord){
-        score++;
-        inputField.value = "";
-        nextWord();
-    }else{
-        typedIndex = typedValue.length;
-        renderWord();
-    }
+// Function to handle typing
+function handleTyping(event) {
+  // === คือเครื่องหมายเปรียบเทียบเท่ากัน โดยเปรียบเทียบทั้งค่าและชนิดของข้อมูล
+  // ตรวจสอบว่าตัวอักษรที่พิมพ์ตรงกับตัวอักษรในตำแหน่งปัจจุบันของ currentWord ไหม
+  if (event.key === currentWord[typedIndex]) {
+      typedIndex++; // เพิ่มค่า typedIndex เพื่อเลื่อนไปยังตัวอักษรถัดไป
+      // ถ้าพิมพ์ครบทุกตัวอักษรใน currentWord
+      if (typedIndex === currentWord.length) {
+          score++; // เพิ่มคะแนน
+          updateScore(); // อัพเดตการแสดงผลของคะแนน
+          nextWord(); // สุ่มคำใหม่
+      } else {
+          renderWord(); // อัพเดตการแสดงผลของคำ
+      }
+  } else {
+      // classList เป็น property ที่ใช้เพิ่ม ลบ และเปลี่ยนแปลง class ของ element
+      // ถ้าพิมพ์ผิด ให้แสดงสีแดง
+      wordDisplay.classList.add("incorrect");
+      // setTimeout ใช้เพื่อถ้าเกิดเราพิมพ์ผิด มันจะไปลบ class สีแดงออก ใส่เวลาตามหลัง
+      setTimeout(() => wordDisplay.classList.remove("incorrect"), 200);
+  }
 }
-
 startButton.addEventListener("click", startGame);
-inputField.addEventListener("input",handleTyping );
 
 

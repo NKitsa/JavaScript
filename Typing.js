@@ -12,6 +12,7 @@ let score = 0;
 let timeLeft = 60;
 let timer;
 let errors = 0;
+let errorCount = 0; // เพิ่มตัวแปรเพื่อเก็บจำนวนครั้งที่พิมพ์ผิด
 let typedIndex = 0; // Index of the current letter being typed
 let currentWord = "";
 
@@ -24,12 +25,13 @@ const reloadButton = document.getElementById("reload");
 // ฟังก์ชันเริ่มเกม
 function startGame() {
     score = 0;
-    timeLeft = 10;
+    timeLeft = 20;
     typedIndex = 0;
+    errorCount = 0;
+    errors = 0;
     nextWord();
     startTimer();
     startButton.style.display = "none";
-    
     document.addEventListener("keydown", handleTyping);
 }
 
@@ -65,41 +67,46 @@ function nextWord() {
 }
 
 function renderWord() {
-  let renderedHTML = ""; // ประกาศตัวแปรเพื่อเก็บ HTML ที่จะถูกสร้างขึ้น
-  // วนลูปผ่านตัวอักษรใน currentWord
+  let renderedHTML = "";
   for (let i = 0; i < currentWord.length; i++) {
-      // ถ้าตัวอักษรในตำแหน่งปัจจุบันถูกพิมพ์ถูกต้อง (i < typedIndex)
-      if (i < typedIndex) {
-          // เพิ่มตัวอักษรที่ถูกพิมพ์ถูกต้องลงใน renderedHTML โดยห่อด้วย <span class="correct">
-          renderedHTML += `<span class="correct">${currentWord[i]}</span>`;
-      } else {
-          // เพิ่มตัวอักษรที่ยังไม่ได้พิมพ์ลงใน renderedHTML โดยห่อด้วย <span>
-          renderedHTML += `<span>${currentWord[i]}</span>`;
-      }
+    if (i < typedIndex) {
+      renderedHTML += `<span class="correct">${currentWord[i]}</span>`;
+    } else {
+      renderedHTML += `<span>${currentWord[i]}</span>`;
+    }
   }
-  // อัพเดตเนื้อหาของ wordDisplay ด้วย HTML ที่สร้างขึ้น
   wordDisplay.innerHTML = renderedHTML;
 }
-// Function to handle typing
+
 function handleTyping(event) {
   // === คือเครื่องหมายเปรียบเทียบเท่ากัน โดยเปรียบเทียบทั้งค่าและชนิดของข้อมูล
   // ตรวจสอบว่าตัวอักษรที่พิมพ์ตรงกับตัวอักษรในตำแหน่งปัจจุบันของ currentWord ไหม
   if (event.key === currentWord[typedIndex]) {
-      typedIndex++; // เพิ่มค่า typedIndex เพื่อเลื่อนไปยังตัวอักษรถัดไป
-      // ถ้าพิมพ์ครบทุกตัวอักษรใน currentWord
-      if (typedIndex === currentWord.length) {
-          score++; // เพิ่มคะแนน
-          updateScore(); // อัพเดตการแสดงผลของคะแนน
-          nextWord(); // สุ่มคำใหม่
-      } else {
-          renderWord(); // อัพเดตการแสดงผลของคำ
-      }
+    typedIndex++; // เพิ่มค่า typedIndex เพื่อเลื่อนไปยังตัวอักษรถัดไป
+    errorCount = 0; // รีเซ็ตจำนวนครั้งที่พิมพ์ผิด
+    // ถ้าพิมพ์ครบทุกตัวอักษรใน currentWord
+    if (typedIndex === currentWord.length) {
+      score++; // เพิ่มคะแนน
+      updateScore(); // อัพเดตการแสดงผลของคะแนน
+      nextWord(); // สุ่มคำใหม่
+    } else {
+      renderWord(); // อัพเดตการแสดงผลของคำ
+    }
   } else {
-      // classList เป็น property ที่ใช้เพิ่ม ลบ และเปลี่ยนแปลง class ของ element
-      // ถ้าพิมพ์ผิด ให้แสดงสีแดง
-      wordDisplay.classList.add("incorrect");
-      // setTimeout ใช้เพื่อถ้าเกิดเราพิมพ์ผิด มันจะไปลบ class สีแดงออก ใส่เวลาตามหลัง
-      setTimeout(() => wordDisplay.classList.remove("incorrect"), 200);
+    errorCount++; // เพิ่มจำนวนครั้งที่พิมพ์ผิด
+    // classList เป็น property ที่ใช้เพิ่ม ลบ และเปลี่ยนแปลง class ของ element
+    // ถ้าพิมพ์ผิด ให้แสดงสีแดง
+    wordDisplay.classList.add("incorrect");
+    // setTimeout ใช้เพื่อถ้าเกิดเราพิมพ์ผิด มันจะไปลบ class สีแดงออก ใส่เวลาตามหลัง
+    setTimeout(() => wordDisplay.classList.remove("incorrect"), 200);
+
+    // ถ้าพิมพ์ผิดเกิน 2 ตัวอักษร
+    if (errorCount >= 2) {
+      score = Math.max(score - 1, 0); // ลดคะแนนลง แต่ไม่มีติดลบ
+      updateScore(); // อัพเดตการแสดงผลของคะแนน
+      nextWord(); // สุ่มคำใหม่
+      errorCount = 0; // รีเซ็ตจำนวนครั้งที่พิมพ์ผิด
+    }
   }
 }
 startButton.addEventListener("click", startGame);

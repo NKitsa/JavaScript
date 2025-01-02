@@ -39,7 +39,7 @@ function startTimer() {
   timer = setInterval(() => {
     timerDisplay.innerHTML = `time <br> ${Math.max(--timeLeft,0)}`;
     if (timeLeft <= 0) {
-      alert("Game Over", `Your score is ${score}`);
+      alert( `Your score is ${score}`);
       clearInterval(timer);
       reloadButton.style.display = "block";
     }

@@ -7,7 +7,7 @@
 // การเข้าถึง input ใช้ document.querySelector("input")
 // ผ่าน method setAttribute("attribute","value")
 // console.log(timeLeft); output ทาง console
-const words = ["population", "javascript", "challenge", "typing", "programming", "function", "variable", "score", "object"];
+const words = ["population", "javascript", "challenge", "typing", "programming", "function", "variable", "score", "object","school","what","do","have","can","read"];
 let score = 0;
 let timeLeft = 60;
 let timer;
@@ -25,10 +25,12 @@ const reloadButton = document.getElementById("reload");
 // ฟังก์ชันเริ่มเกม
 function startGame() {
     score = 0;
-    timeLeft = 20;
+    timeLeft = 5;
     typedIndex = 0;
     errorCount = 0;
     errors = 0;
+    scoreDisplay.style.color = "Green";
+    timerDisplay.style.color = "Green";
     nextWord();
     startTimer();
     startButton.style.display = "none";
@@ -37,15 +39,18 @@ function startGame() {
 
 function startTimer() {
   timer = setInterval(() => {
-    timerDisplay.innerHTML = `time <br> ${Math.max(--timeLeft,0)}`;
-    if (timeLeft <= 0) {
-      alert( `Your score is ${score}`);
-      clearInterval(timer);
+    if (timeLeft > 0) {
+      timeLeft--; // ลดค่าก่อน
+      timerDisplay.innerHTML = `time <br> ${timeLeft}`; // แสดงผลค่าที่ลดแล้ว
+    } else {
+      clearInterval(timer); // หยุดตัวจับเวลาเมื่อถึง 0
+      timerDisplay.innerHTML = `time <br> 0`; 
+      alert(`Your score is ${score}`);
       reloadButton.style.display = "block";
     }
   }, 1000);
-  
 }
+
 
 function reload(){
   // รีหน้า web

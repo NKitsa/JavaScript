@@ -83,7 +83,6 @@ function handleTyping(event) {
   // ตรวจสอบว่าตัวอักษรที่พิมพ์ตรงกับตัวอักษรในตำแหน่งปัจจุบันของ currentWord ไหม
   if (event.key === currentWord[typedIndex]) {
     typedIndex++; // เพิ่มค่า typedIndex เพื่อเลื่อนไปยังตัวอักษรถัดไป
-    errorCount = 0; // รีเซ็ตจำนวนครั้งที่พิมพ์ผิด
     // ถ้าพิมพ์ครบทุกตัวอักษรใน currentWord
     if (typedIndex === currentWord.length) {
       score++; // เพิ่มคะแนน

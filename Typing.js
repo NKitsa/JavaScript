@@ -7,15 +7,19 @@
 // การเข้าถึง input ใช้ document.querySelector("input")
 // ผ่าน method setAttribute("attribute","value")
 // console.log(timeLeft); output ทาง console
+
+
+
+
 const words = ["population", "javascript", "challenge", "typing", "programming", "function", "variable", "score", "object","school","what","do","have","can","read"];
 let score = 0;
 let timeLeft = 60;
 let timer;
-let errors = 0;
 let errorCount = 0; // เพิ่มตัวแปรเพื่อเก็บจำนวนครั้งที่พิมพ์ผิด
-let typedIndex = 0; // Index of the current letter being typed
+let typedIndex = 0; 
 let currentWord = "";
 
+// เอาไว้ใช้เปลี่ยนแปลงหน้า html
 const wordDisplay = document.getElementById("word");
 const startButton = document.getElementById("start");
 const scoreDisplay = document.getElementById("score");
@@ -25,12 +29,9 @@ const reloadButton = document.getElementById("reload");
 // ฟังก์ชันเริ่มเกม
 function startGame() {
     score = 0;
-    timeLeft = 5;
+    timeLeft = 60;
     typedIndex = 0;
     errorCount = 0;
-    errors = 0;
-    scoreDisplay.style.color = "Green";
-    timerDisplay.style.color = "Green";
     nextWord();
     startTimer();
     startButton.style.display = "none";
@@ -40,8 +41,8 @@ function startGame() {
 function startTimer() {
   timer = setInterval(() => {
     if (timeLeft > 0) {
-      timeLeft--; // ลดค่าก่อน
-      timerDisplay.innerHTML = `time <br> ${timeLeft}`; // แสดงผลค่าที่ลดแล้ว
+      timeLeft--; 
+      timerDisplay.innerHTML = `time <br> ${timeLeft}`; 
     } else {
       clearInterval(timer); // หยุดตัวจับเวลาเมื่อถึง 0
       timerDisplay.innerHTML = `time <br> 0`; 
@@ -63,7 +64,7 @@ function reload(){
 function updateScore(){
   scoreDisplay.innerHTML = `score<br>${score}`;
 }
-// Function to replace the word in the div
+
 function nextWord() {
   // จะให้ currentword ที่เป็นคำที่สุ่มมาจาก array words
   currentWord = words[Math.floor(Math.random() * words.length)];
@@ -71,45 +72,44 @@ function nextWord() {
   renderWord();
 }
 
+// พิมพ์ตามคำ กับคำที่โชว์
 function renderWord() {
   let renderedHTML = "";
   for (let i = 0; i < currentWord.length; i++) {
     if (i < typedIndex) {
       renderedHTML += `<span class="correct">${currentWord[i]}</span>`;
     } else {
+      // เพิ่ม HTML ปกติสำหรับตัวอักษรที่ยังไม่ได้พิมพ์
       renderedHTML += `<span>${currentWord[i]}</span>`;
     }
   }
   wordDisplay.innerHTML = renderedHTML;
 }
 
+
 function handleTyping(event) {
-  // === คือเครื่องหมายเปรียบเทียบเท่ากัน โดยเปรียบเทียบทั้งค่าและชนิดของข้อมูล
-  // ตรวจสอบว่าตัวอักษรที่พิมพ์ตรงกับตัวอักษรในตำแหน่งปัจจุบันของ currentWord ไหม
   if (event.key === currentWord[typedIndex]) {
-    typedIndex++; // เพิ่มค่า typedIndex เพื่อเลื่อนไปยังตัวอักษรถัดไป
-    // ถ้าพิมพ์ครบทุกตัวอักษรใน currentWord
+    typedIndex++; // คือตัวอักษรปัจจุบัน
     if (typedIndex === currentWord.length) {
-      score++; // เพิ่มคะแนน
-      updateScore(); // อัพเดตการแสดงผลของคะแนน
-      nextWord(); // สุ่มคำใหม่
-    } else {
-      renderWord(); // อัพเดตการแสดงผลของคำ
+      score++; 
+      updateScore(); 
+      nextWord(); 
+    } else { //ถ้าเกิดยังพิมพ์ไม่ครบ
+      renderWord(); 
     }
   } else {
-    errorCount++; // เพิ่มจำนวนครั้งที่พิมพ์ผิด
-    // classList เป็น property ที่ใช้เพิ่ม ลบ และเปลี่ยนแปลง class ของ element
-    // ถ้าพิมพ์ผิด ให้แสดงสีแดง
+    errorCount++; 
+    // classList  ที่ใช้เพิ่ม ลบ class ของ element
     wordDisplay.classList.add("incorrect");
     // setTimeout ใช้เพื่อถ้าเกิดเราพิมพ์ผิด มันจะไปลบ class สีแดงออก ใส่เวลาตามหลัง
     setTimeout(() => wordDisplay.classList.remove("incorrect"), 200);
 
     // ถ้าพิมพ์ผิดเกิน 2 ตัวอักษร
     if (errorCount >= 2) {
-      score = Math.max(score - 1, 0); // ลดคะแนนลง แต่ไม่มีติดลบ
-      updateScore(); // อัพเดตการแสดงผลของคะแนน
-      nextWord(); // สุ่มคำใหม่
-      errorCount = 0; // รีเซ็ตจำนวนครั้งที่พิมพ์ผิด
+      score = Math.max(score - 1, 0); 
+      updateScore(); 
+      nextWord(); 
+      errorCount = 0; 
     }
   }
 }
